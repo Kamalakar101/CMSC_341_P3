@@ -1,0 +1,19 @@
+Dump of the leftist heap queue with priorityFn2 (MINHEAP):
+((((86:wylbi:0)59:eortw:0)29:nfntz:1(36:nwzmb:0))7:tqepl:1(((52:zqrij:0)40:jepar:0)19:akiwe:0))
+
+Dump of the skew heap queue with priorityFn2 (MINHEAP):
+((((86:wylbi)36:nwzmb)19:akiwe(52:zqrij))7:tqepl((59:eortw)29:nfntz(40:jepar)))
+
+Preorder traversal of the nodes in the queue with priorityFn2 (MINHEAP):
+Contents of the queue:
+[7] Customer: tqepl, importance: 29, quantity: 8291, order placement time: 1
+[19] Customer: akiwe, importance: 65, quantity: 2344, order placement time: 16
+[36] Customer: nwzmb, importance: 9, quantity: 6648, order placement time: 30
+[86] Customer: wylbi, importance: 90, quantity: 5829, order placement time: 50
+[52] Customer: zqrij, importance: 16, quantity: 8293, order placement time: 37
+[29] Customer: nfntz, importance: 30, quantity: 7400, order placement time: 26
+[59] Customer: eortw, importance: 94, quantity: 2520, order placement time: 29
+[40] Customer: jepar, importance: 10, quantity: 2289, order placement time: 10
+
+Dump of the skew queue with priorityFn1 (MAXHEAP):
+((((6075:wylbi)6815:nwzmb(2539:akiwe))8548:tqepl((2417:jepar)7716:nfntz))8609:zqrij(2892:eortw))
