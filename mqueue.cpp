@@ -1,18 +1,19 @@
 // CMSC 341 - Fall 2024 - Project 3
 #include "mqueue.h"
-MQueue::MQueue(prifn_t priFn, HEAPTYPE heapType, STRUCTURE structure)
-{
-  
+MQueue::MQueue(prifn_t priFn, HEAPTYPE heapType, STRUCTURE structure) {
+  m_priorFunc = priFn;
+  m_heapType = heapType;
+  m_structure = structure;
+  m_heap = nullptr;
+  m_size = 0;
 }
-MQueue::~MQueue()
-{
-  
+MQueue::~MQueue() {
+  clear();
 }
 void MQueue::clear() {
-    
+  deleteHeap(m_heap);
 }
-MQueue::MQueue(const MQueue& rhs)
-{
+MQueue::MQueue(const MQueue& rhs) {
   
 }
 MQueue& MQueue::operator=(const MQueue& rhs) {
@@ -24,24 +25,30 @@ void MQueue::mergeWithQueue(MQueue& rhs) {
 bool MQueue::insertOrder(const Order& order) {
     
 }
-int MQueue::numOrders() const
-{
-  
+int MQueue::numOrders() const {
+  return m_size;
 }
 prifn_t MQueue::getPriorityFn() const {
-  
+  return m_priorFunc;
 }
 Order MQueue::getNextOrder() {
-    
+  if (m_heap != nullptr) {
+    //code to separate the heapRoot
+    return m_heap->m_order;
+  }
+  //Throw exception
+  return Order();
 }
 void MQueue::setPriorityFn(prifn_t priFn, HEAPTYPE heapType) {
                       
 }
-void MQueue::setStructure(STRUCTURE structure){
-    
+HEAPTYPE MQueue::getHeapType() const {
+  return m_heapType;
+}
+void MQueue::setStructure(STRUCTURE structure) {
 }
 STRUCTURE MQueue::getStructure() const {
-  
+  return m_structure;
 }
 void MQueue::printOrderQueue() const {
   
@@ -65,6 +72,39 @@ void MQueue::dump(Node *pos) const {
     dump(pos->m_right);
     cout << ")";
   }
+}
+
+void MQueue::deleteHeap(Node *heapRoot) {
+  if (heapRoot != nullptr) {
+    deleteHeap(heapRoot->m_left);
+    deleteHeap(heapRoot->m_right);
+    delete heapRoot;
+  }
+}
+
+Node *MQueue::merge(Node *heapOne, Node *heapTwo) {
+  if (heapOne == nullptr) {
+    return heapTwo;
+  }
+  else if (heapTwo == nullptr) {
+    return heapOne;
+  }
+
+  //If heapTwo has higher priority than heapOne
+  if (m_priorFunc(heapOne->m_order) < m_priorFunc(heapTwo->m_order)) {
+    //Swaps heapOne and heapTwo
+    Node * temp = heapOne;
+    heapOne = heapTwo;
+    heapTwo = temp;
+  }
+  
+  //Swapping left and right subtrees
+  Node * temp = heapOne->m_left;
+  heapOne->m_left = heapOne->m_right;
+  heapOne->m_right = temp;
+
+  //Recursive Call
+  heapOne->m_left = merge(heapOne->m_left, heapTwo);
 }
 
 ostream& operator<<(ostream& sout, const Order& order) {

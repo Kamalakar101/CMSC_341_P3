@@ -144,7 +144,8 @@ private:
     /******************************************
      * Private function declarations go here! *
      ******************************************/
-    
+    void deleteHeap(Node *heapRoot);
+    Node * merge(Node *heapOne, Node *heapTwo);
 };
 
 #endif
