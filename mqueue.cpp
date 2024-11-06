@@ -23,7 +23,19 @@ void MQueue::mergeWithQueue(MQueue& rhs) {
   
 }
 bool MQueue::insertOrder(const Order& order) {
-    
+  if (true) {
+    if (m_heap == nullptr) {
+      m_heap = new Node(order);
+      m_size++;
+      return true;
+    }
+    else {
+      merge(m_heap, new Node(order));
+      m_size++;
+      return true;
+    }
+    return false;
+  }
 }
 int MQueue::numOrders() const {
   return m_size;
@@ -91,7 +103,7 @@ Node *MQueue::merge(Node *heapOne, Node *heapTwo) {
   }
 
   //If heapTwo has higher priority than heapOne
-  if (m_priorFunc(heapOne->m_order) < m_priorFunc(heapTwo->m_order)) {
+  if ((m_priorFunc(heapOne->m_order) > m_priorFunc(heapTwo->m_order) && m_heapType == MINHEAP) || (m_priorFunc(heapOne->m_order) < m_priorFunc(heapTwo->m_order) && m_heapType == MAXHEAP)) {
     //Swaps heapOne and heapTwo
     Node * temp = heapOne;
     heapOne = heapTwo;
