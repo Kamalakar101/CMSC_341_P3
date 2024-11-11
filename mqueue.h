@@ -146,6 +146,10 @@ private:
      ******************************************/
     void deleteHeap(Node *heapRoot);
     Node * merge(Node *heapOne, Node *heapTwo);
+    Node * leftistMerge(Node *heapOne, Node *heapTwo);
+    Node * duplicateHeap(Node *heapRoot);
+    void rebuild();
+    void printPreOrder(Node *node) const;
 };
 
 #endif

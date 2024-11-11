@@ -152,6 +152,7 @@ int main() {
                 material.getRandNum(), importance.getRandNum(),
                 workers.getRandNum(), quantity.getRandNum());
       queue1.insertOrder(order);
+
     }
     cout << "\nDump of the leftist heap queue with priorityFn2 (MINHEAP):\n";
     queue1.dump();
