@@ -1,8 +1,8 @@
 CXX = g++
 CXXFLAGS = -Wall -g
 
-proj3: mqueue.o driver.cpp
-		$(CXX) $(CXXFLAGS) mqueue.o driver.cpp -o proj3
+proj3: mqueue.o mytest.cpp
+		$(CXX) $(CXXFLAGS) mqueue.o mytest.cpp -o proj3
 
 mqueue.o: mqueue.cpp  mqueue.h
 		$(CXX) $(CXXFLAGS) -c mqueue.cpp

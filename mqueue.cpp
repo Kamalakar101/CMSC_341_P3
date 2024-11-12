@@ -36,12 +36,15 @@ MQueue::MQueue(const MQueue& rhs) {
 //Overloaded Assignment
 //Assignment Operator for MQueue objects
 MQueue& MQueue::operator=(const MQueue& rhs) {
+  //Protection against self assignment
   if (this != &rhs) {
+    //Clears this heap
     clear();
     m_size = rhs.m_size;
     m_priorFunc = rhs.m_priorFunc;
     m_structure = rhs.m_structure;
     m_heapType = rhs.m_heapType;
+    //Duplicates the rhs heap and assigns it to this heap
     m_heap = duplicateHeap(rhs.m_heap);
   }
   return *this;
@@ -50,7 +53,9 @@ MQueue& MQueue::operator=(const MQueue& rhs) {
 //mergeWithQueue()
 //Merges this heap with another MQueue object
 void MQueue::mergeWithQueue(MQueue& rhs) {
+  //Protection against self merging
   if (this != &rhs) {
+    //If the rhs heap is similar to this heap
     if (m_structure == rhs.m_structure && m_heapType == rhs.m_heapType && m_priorFunc == rhs.m_priorFunc) {
       m_heap = merge(m_heap, rhs.m_heap);
       m_size += rhs.m_size;
@@ -67,6 +72,7 @@ void MQueue::mergeWithQueue(MQueue& rhs) {
 //insertOrder()
 //Inserts an order into the heap
 bool MQueue::insertOrder(const Order& order) {
+  //If the order is valid
   if (m_priorFunc(order) != 0) {
     m_heap = merge(m_heap, new Node(order));
     m_size++;
@@ -90,17 +96,19 @@ prifn_t MQueue::getPriorityFn() const {
 //getNextOrder()
 //Pops the priority node out of the heap
 Order MQueue::getNextOrder() {
+  //If the heap isn't empty
   if (m_heap != nullptr) {
-    //code to separate the heapRoot
+    //Separates the heapRoot
     Node *leftSubtree = m_heap->m_left;
     Node *rightSubtree = m_heap->m_right;
     Order order(m_heap->m_order);
     delete m_heap;
+    //Merges two subtrees
     m_heap = merge(leftSubtree, rightSubtree);
     m_size--;
     return order;
   }
-  //Throw exception
+  //Throws exception if the heap is empty
   cout << "out_of_range" << endl;
   return Order();
 }
@@ -142,6 +150,7 @@ void MQueue::printOrderQueue() const {
 //dump()
 //Prints out the heap
 void MQueue::dump() const {
+  //If the heap is empty
   if (m_size == 0) {
     cout << "Empty heap.\n" ;
   } else {
@@ -156,10 +165,12 @@ void MQueue::dump(Node *pos) const {
   if ( pos != nullptr ) {
     cout << "(";
     dump(pos->m_left);
+    //Skew output
     if (m_structure == SKEW)
-        cout << m_priorFunc(pos->m_order) << ":" << pos->m_order.m_customer;
+      cout << m_priorFunc(pos->m_order) << ":" << pos->m_order.m_customer;
+    //Leftist output
     else
-        cout << m_priorFunc(pos->m_order) << ":" << pos->m_order.m_customer << ":" << pos->m_npl;
+      cout << m_priorFunc(pos->m_order) << ":" << pos->m_order.m_customer << ":" << pos->m_npl;
     dump(pos->m_right);
     cout << ")";
   }
@@ -168,6 +179,7 @@ void MQueue::dump(Node *pos) const {
 //deleteHeap()
 //Recursively deallocates the heap
 void MQueue::deleteHeap(Node *heapRoot) {
+  //If the heap is not empty
   if (heapRoot != nullptr) {
     deleteHeap(heapRoot->m_left);
     deleteHeap(heapRoot->m_right);
@@ -178,19 +190,21 @@ void MQueue::deleteHeap(Node *heapRoot) {
 //merge()
 //Merges two heaps
 Node *MQueue::merge(Node *heapOne, Node *heapTwo) {
+  //Base Case
   if (heapOne == nullptr) {
     return heapTwo;
   }
+  //Base Case
   else if (heapTwo == nullptr) {
     return heapOne;
   }
-    //If heapTwo has higher priority than heapOne
-  //Skew Heap
+  //If heapTwo has higher priority than heapOne
+  //Recursive Case: Skew Heap
   if ((m_structure == SKEW) && (((m_heapType == MINHEAP) && (m_priorFunc(heapOne->m_order) > m_priorFunc(heapTwo->m_order))) || ((m_heapType == MAXHEAP) && (m_priorFunc(heapOne->m_order) < m_priorFunc(heapTwo->m_order))))) {
     //Swaps heapOne and heapTwo
     swap(heapOne, heapTwo);
   }
-  //Leftist Heap
+  //Recursive Case: Leftist Heap
   if ((m_structure == LEFTIST) && (((m_heapType == MINHEAP) && (m_priorFunc(heapOne->m_order) < m_priorFunc(heapTwo->m_order))) || ((m_heapType == MAXHEAP) && (m_priorFunc(heapOne->m_order) > m_priorFunc(heapTwo->m_order))))) {
     return leftistMerge(heapOne, heapTwo);
   }
@@ -198,6 +212,7 @@ Node *MQueue::merge(Node *heapOne, Node *heapTwo) {
     return leftistMerge(heapTwo, heapOne);
   }
   
+  //Rest of Skew Code
   //Swapping left and right subtrees
   swap(heapOne->m_left, heapOne->m_right);
 
@@ -209,6 +224,7 @@ Node *MQueue::merge(Node *heapOne, Node *heapTwo) {
 //leftistMerge()
 //Used for merging leftist heaps
 Node *MQueue::leftistMerge(Node *heapOne, Node *heapTwo) {
+  //If the left node is empty
   if (heapOne->m_left == nullptr) {
     heapOne->m_left = heapTwo;
   }
@@ -225,9 +241,11 @@ Node *MQueue::leftistMerge(Node *heapOne, Node *heapTwo) {
 //duplicateHeap()
 //Duplicates a heap and returns the duplicate's root
 Node *MQueue::duplicateHeap(Node *heapRoot) {
+  //Base Case
   if (heapRoot == nullptr) {
     return nullptr;
   }
+  //Recursive Calls
   Node *node = new Node(heapRoot->m_order);
   node->m_left = duplicateHeap(heapRoot->m_left);
   node->m_right = duplicateHeap(heapRoot->m_right);
@@ -239,12 +257,15 @@ Node *MQueue::duplicateHeap(Node *heapRoot) {
 //Rebuilds the heap
 void MQueue::rebuild() {
   Node *newHeap = nullptr;
+  //Loops until m_heap is empty
   for (int i = m_size; i > 0; i--) {
     Node *priority = m_heap;
+    //Pops the root and merges subtrees
     m_heap = merge(m_heap->m_left, m_heap->m_right);
     priority->m_left = nullptr;
     priority->m_right = nullptr;
     priority->m_npl = 0;
+    //Adds the node to the newHeap
     newHeap = merge(newHeap, priority);
   }
   m_heap = newHeap;
@@ -253,6 +274,7 @@ void MQueue::rebuild() {
 //printPreOrder()
 //Recursively prints out the orders in the heap in pre-order
 void MQueue::printPreOrder(Node *node) const {
+  //Recurses until the node is nullptr
   if (node != nullptr) {
     cout << '[' << m_priorFunc(node->m_order) << ']' << ' ' << node->m_order << endl;
     printPreOrder(node->m_left);
