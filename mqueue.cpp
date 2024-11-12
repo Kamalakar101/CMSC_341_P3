@@ -64,7 +64,7 @@ void MQueue::mergeWithQueue(MQueue& rhs) {
     }
     //If heap structure or type/priority functions don't match, throws exception
     else {
-      cout << "domain_error" << endl;
+      throw "domain_error"s;
     }
   }
 }
@@ -109,8 +109,7 @@ Order MQueue::getNextOrder() {
     return order;
   }
   //Throws exception if the heap is empty
-  cout << "out_of_range" << endl;
-  return Order();
+  throw "out_of_range"s;
 }
 
 //setPriorityFn()
